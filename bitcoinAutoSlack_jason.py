@@ -5,7 +5,7 @@ import requests
 
 access = "Ozgp1n6bC2q0rZmrgzKcnDcqoWqF8NgCgf4dPhMb"
 secret = "z9gFwU38V4cpmUzVsv6u9pddgvu5rARO2LhIsF1C"
-myToken = "xoxb-2064130842913-2036913322215-TIIE6KZgOe7FL5xjgsJfTSCd"
+myToken = "xoxb-2064130842913-2036913322215-N1dqlYmkRym5RiVowYmoRMcN"
 
 def post_message(token, channel, text):
     # """슬랙 메시지 전송"""
@@ -27,8 +27,8 @@ def get_start_time(ticker):
     return start_time
 
 def get_ma15(ticker):
-    # """15일 이동 평균선 조회"""
-    df = pyupbit.get_ohlcv(ticker, interval="day", count=15)
+    # """15일 이동 평균선 조회""" 분으로 변경 테스트
+    df = pyupbit.get_ohlcv(ticker, interval="min", count=15)
     ma15 = df['close'].rolling(15).mean().iloc[-1]
     return ma15
 
@@ -55,23 +55,24 @@ post_message(myToken,"#develop", "autotrade start")
 while True:
     try:
         now = datetime.datetime.now()
-        start_time = get_start_time("KRW-BTC")
+        start_time = get_start_time("KRW-ETC")
         end_time = start_time + datetime.timedelta(days=1)
 
         if start_time < now < end_time - datetime.timedelta(seconds=10):
-            target_price = get_target_price("KRW-BTC", 0.5)
-            ma15 = get_ma15("KRW-BTC")
-            current_price = get_current_price("KRW-BTC")
+            target_price = get_target_price("KRW-ETC", 0.5)
+            ma15 = get_ma15("KRW-ETC")
+            current_price = get_current_price("KRW-ETC")
+            post_message(myToken,"#develop", "else")
             if target_price < current_price and ma15 < current_price:
                 krw = get_balance("KRW")
                 if krw > 5000:
-                    buy_result = upbit.buy_market_order("KRW-BTC", krw*0.9995)
-                    post_message(myToken,"#develop", "BTC buy : " +str(buy_result))
+                    buy_result = upbit.buy_market_order("KRW-ETC", krw*0.9995)
+                    post_message(myToken,"#develop", "ETC buy : " +str(buy_result))
         else:
-            btc = get_balance("BTC")
-            if btc > 0.00008:
-                sell_result = upbit.sell_market_order("KRW-BTC", btc*0.9995)
-                post_message(myToken,"#develop", "BTC buy : " +str(sell_result))
+            ETC = get_balance("ETC")
+            if ETC > 0.00008:
+                sell_result = upbit.sell_market_order("KRW-ETC", ETC*0.9995)
+                post_message(myToken,"#develop", "ETC buy : " +str(sell_result))
         time.sleep(1)
     except Exception as e:
         print(e)

@@ -5,7 +5,7 @@ import requests
 
 access = "Ri8sxlJg25hn91uuMdxxdSu7nDV4TwaEJxfsU1Fp"
 secret = "NnevoGtx8ySsTP3PXBxg2GU5X"
-myToken = "xoxb-2064130842913-2036913322215-TIIE6KZgOe7FL5xjgsJfTSCd"
+myToken = "xoxb-2064130842913-2036913322215-N1dqlYmkRym5RiVowYmoRMcN"
 def post_message(token, channel, text):
     # """슬랙 메시지 전송"""
     response = requests.post("https://slack.com/api/chat.postMessage",
